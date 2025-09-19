@@ -1,0 +1,403 @@
+# Coastal Plain League Website - Cursor Rules
+
+## Project Overview
+This is a Next.js 14 website for the Coastal Plain League, a premier summer collegiate baseball league. The project uses TypeScript, Tailwind CSS, and Radix UI components with a focus on sports content, team management, and league information.
+
+## Tech Stack
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS with custom CPL brand colors
+- **UI Components**: Radix UI primitives with shadcn/ui
+- **Fonts**: Inter (primary), Oswald (headings)
+- **Build**: Static export (`output: 'export'`)
+
+## File Structure & Organization
+
+### Directory Structure
+```
+app/                    # Next.js App Router pages
+├── (routes)/          # Route groups
+├── globals.css        # Global styles
+└── layout.tsx         # Root layout
+
+components/            # Reusable components
+├── ui/               # shadcn/ui components
+├── home/             # Home page specific components
+├── Header.tsx        # Site header
+└── Footer.tsx        # Site footer
+
+lib/                  # Utility functions
+hooks/                # Custom React hooks
+```
+
+### Naming Conventions
+- **Files**: Use PascalCase for components (`Header.tsx`), kebab-case for pages (`contact/page.tsx`)
+- **Components**: PascalCase (`HeroSection`, `TeamsGrid`)
+- **Variables**: camelCase (`teamData`, `isLoading`)
+- **Constants**: SCREAMING_SNAKE_CASE (`API_BASE_URL`)
+- **CSS Classes**: Use Tailwind utility classes, custom classes with `cpl-` prefix
+
+## Code Standards
+
+### TypeScript
+- Use strict TypeScript configuration
+- Define proper interfaces for all data structures
+- Use type assertions sparingly and with proper validation
+- Prefer `interface` over `type` for object shapes
+- Use generic types for reusable components
+
+```typescript
+// Good
+interface Team {
+  id: string;
+  name: string;
+  city: string;
+  logo: string;
+}
+
+// Good
+const TeamCard: React.FC<{ team: Team }> = ({ team }) => {
+  // component implementation
+};
+```
+
+### React Components
+- Use functional components with hooks
+- Prefer composition over inheritance
+- Use proper prop types and default values
+- Implement proper error boundaries
+- Use React.memo for performance optimization when needed
+
+```typescript
+// Good
+interface TeamCardProps {
+  team: Team;
+  className?: string;
+}
+
+const TeamCard: React.FC<TeamCardProps> = ({ team, className = "" }) => {
+  return (
+    <div className={`team-card ${className}`}>
+      {/* component content */}
+    </div>
+  );
+};
+```
+
+### Next.js Specific
+- Use App Router patterns (not Pages Router)
+- Implement proper metadata for SEO
+- Use dynamic imports for code splitting
+- Implement proper loading and error states
+- Use Next.js Image component for images
+
+```typescript
+// Good - App Router page
+export default function TeamPage({ params }: { params: { slug: string } }) {
+  return (
+    <div>
+      {/* page content */}
+    </div>
+  );
+}
+
+// Good - Metadata
+export const metadata: Metadata = {
+  title: 'Team Name | Coastal Plain League',
+  description: 'Team description...',
+};
+```
+
+## Styling Guidelines
+
+### Tailwind CSS
+- Use Tailwind utility classes primarily
+- Create custom components for repeated patterns
+- Use CSS variables for theme values
+- Follow mobile-first responsive design
+- Use the custom CPL color palette
+
+### CPL Brand Colors
+```css
+/* Available in Tailwind config */
+cpl-navy: #001a33      /* Primary brand color */
+cpl-red: #C8102E       /* Accent color */
+cpl-primary: #001a33   /* Same as navy */
+cpl-secondary: #22b24c /* Green accent */
+cpl-light-gray: #F5F5F5 /* Background */
+```
+
+### Component Styling
+```typescript
+// Good - Using CPL colors
+<div className="bg-cpl-navy text-white p-4 rounded-lg">
+  <h2 className="text-cpl-red font-oswald text-xl">Team Name</h2>
+</div>
+
+// Good - Responsive design
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {/* responsive grid */}
+</div>
+```
+
+## Component Architecture
+
+### UI Components (components/ui/)
+- Use shadcn/ui components as base
+- Extend with CPL-specific styling
+- Maintain accessibility standards
+- Use proper ARIA labels and roles
+
+### Page Components (components/home/, etc.)
+- Create page-specific components
+- Keep components focused and single-purpose
+- Use proper prop interfaces
+- Implement loading and error states
+
+### Layout Components
+- Header: Navigation, logo, mobile menu
+- Footer: Links, contact info, social media
+- Maintain consistent spacing and typography
+
+## Data Management
+
+### Static Data
+- Store team data, schedules, stats in TypeScript files
+- Use proper interfaces for data structures
+- Consider using JSON files for large datasets
+
+### API Integration
+- Use proper error handling
+- Implement loading states
+- Use TypeScript for API responses
+- Consider caching strategies
+
+```typescript
+// Good - API response typing
+interface ApiResponse<T> {
+  data: T;
+  success: boolean;
+  message?: string;
+}
+
+interface TeamStats {
+  wins: number;
+  losses: number;
+  runsScored: number;
+  runsAllowed: number;
+}
+```
+
+## Performance Guidelines
+
+### Next.js Optimization
+- Use dynamic imports for heavy components
+- Implement proper image optimization
+- Use Next.js built-in caching
+- Minimize bundle size
+
+### React Performance
+- Use React.memo for expensive components
+- Implement proper key props for lists
+- Avoid unnecessary re-renders
+- Use useCallback and useMemo appropriately
+
+### CSS Performance
+- Use Tailwind's purge configuration
+- Minimize custom CSS
+- Use CSS variables for theming
+- Optimize animations and transitions
+
+## Accessibility Standards
+
+### WCAG Compliance
+- Maintain proper heading hierarchy (h1 → h2 → h3)
+- Use semantic HTML elements
+- Provide alt text for images
+- Ensure proper color contrast ratios
+- Implement keyboard navigation
+
+### ARIA Guidelines
+- Use ARIA labels for interactive elements
+- Implement proper focus management
+- Use role attributes when necessary
+- Ensure screen reader compatibility
+
+```typescript
+// Good - Accessible component
+<button
+  className="bg-cpl-red text-white px-4 py-2 rounded"
+  aria-label="View team details"
+  onClick={handleClick}
+>
+  View Details
+</button>
+```
+
+## SEO Best Practices
+
+### Metadata
+- Use proper title tags with CPL branding
+- Implement meta descriptions
+- Use Open Graph tags for social sharing
+- Implement structured data for sports content
+
+### Content Structure
+- Use proper heading hierarchy
+- Implement breadcrumbs for navigation
+- Use descriptive URLs
+- Optimize images with alt text
+
+## Testing Guidelines
+
+### Component Testing
+- Test component rendering
+- Test user interactions
+- Test error states
+- Test responsive behavior
+
+### Integration Testing
+- Test page navigation
+- Test data loading
+- Test form submissions
+- Test API integrations
+
+## Deployment & Build
+
+### Build Configuration
+- Static export enabled (`output: 'export'`)
+- ESLint disabled during builds (as configured)
+- Image optimization disabled for static export
+- Proper environment variable handling
+
+### Performance Monitoring
+- Monitor Core Web Vitals
+- Track bundle size
+- Monitor loading times
+- Test on various devices
+
+## Code Quality
+
+### Linting & Formatting
+- Use ESLint with Next.js configuration
+- Implement Prettier for code formatting
+- Use TypeScript strict mode
+- Follow consistent code style
+
+### Git Workflow
+- Use descriptive commit messages
+- Create feature branches
+- Use pull requests for code review
+- Keep commits atomic and focused
+
+## Common Patterns
+
+### Error Handling
+```typescript
+// Good - Error boundary
+const ErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // error boundary implementation
+};
+
+// Good - API error handling
+try {
+  const data = await fetchTeamData();
+  setTeamData(data);
+} catch (error) {
+  console.error('Failed to fetch team data:', error);
+  setError('Failed to load team data');
+}
+```
+
+### Loading States
+```typescript
+// Good - Loading state
+const [isLoading, setIsLoading] = useState(true);
+
+if (isLoading) {
+  return <div className="flex justify-center p-8">Loading...</div>;
+}
+```
+
+### Form Handling
+```typescript
+// Good - Form with validation
+const ContactForm: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // form submission logic
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {/* form fields */}
+    </form>
+  );
+};
+```
+
+## Sports-Specific Guidelines
+
+### Team Data Structure
+- Consistent team information across all pages
+- Proper handling of team logos and images
+- Season and game data organization
+- Player statistics formatting
+
+### Content Management
+- Consistent terminology for baseball terms
+- Proper date/time formatting for games
+- Responsive tables for statistics
+- Mobile-friendly score displays
+
+## Security Considerations
+
+### Data Protection
+- Sanitize user inputs
+- Use proper validation
+- Implement CSRF protection
+- Secure API endpoints
+
+### Content Security
+- Use HTTPS in production
+- Implement proper headers
+- Validate file uploads
+- Protect against XSS attacks
+
+## Maintenance Guidelines
+
+### Code Documentation
+- Document complex functions
+- Use JSDoc for public APIs
+- Maintain README files
+- Document deployment procedures
+
+### Dependency Management
+- Keep dependencies updated
+- Use exact versions for critical packages
+- Regular security audits
+- Monitor for breaking changes
+
+## Development Workflow
+
+### Local Development
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
+```
+
+### Environment Setup
+- Node.js 18+ required
+- Use npm for package management
+- Configure environment variables
+- Set up proper IDE configuration
+
+Remember: This is a sports website representing a professional baseball league. Maintain high standards for code quality, performance, and user experience. Always consider the end user - baseball fans, players, coaches, and league officials who will be using this site.
